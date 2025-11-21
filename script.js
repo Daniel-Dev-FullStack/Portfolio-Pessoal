@@ -8,6 +8,51 @@ const botoes = {
 };
 
 
+const botao = document.querySelector(".menu-botao");
+const menu = document.querySelector(".menu-lista");
+let aberto = false;
+
+botao.addEventListener("click", () => {
+
+    if (!aberto) {
+        menu.style.setProperty("display", "flex", "important");
+
+        gsap.set(menu, { 
+            y: -10,
+            opacity: 0,
+            filter: "blur(5px)"
+        });
+
+        gsap.to(menu, {
+            y: 0,
+            opacity: 1,
+            filter: "blur(0px)",
+            duration: 0.5,
+            ease: "power4.out"
+        });
+
+        aberto = true;
+
+    } else {
+        gsap.to(menu, {
+            y: -15,
+            opacity: 0,
+            filter: "blur(5px)",
+            duration: 0.5,
+            ease: "power4.in",
+            onComplete: () => {
+                menu.style.setProperty("display", "none", "important");
+                gsap.set(menu, { y: 0 });
+            }
+        });
+
+        aberto = false;
+    }
+
+});
+
+
+
 
 function animacao(elemento) {
     gsap.set(elemento, { 
@@ -21,6 +66,8 @@ function animacao(elemento) {
         ease: "power2.out"
     });
 }
+
+
 
 
 let ultimoClicado = botoes.home;
@@ -323,3 +370,6 @@ botoes.sobre.addEventListener("click", carregarSobre);
 botoes.projetos.addEventListener("click", carregarProjetos);
 botoes.achievements.addEventListener("click", carregarAchievements);
 botoes.contato.addEventListener("click", carregarContato);
+
+
+
