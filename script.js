@@ -1,4 +1,7 @@
 const substituir = document.querySelector(".conteudo-portfolio");
+
+
+//MAPA DE BOTÕES
 const botoes = {
   home: document.querySelector(".categoria-home"),
   sobre: document.querySelector(".categoria-sobre"),
@@ -8,6 +11,17 @@ const botoes = {
 };
 
 
+// MAPA DE SEÇÕES
+const secoes = {
+  home: carregarHome,
+  sobre: carregarSobre,
+  projetos: carregarProjetos,
+  achievements: carregarAchievements,
+  contato: carregarContato
+};
+
+
+//ANIMAÇÃO AO CARREGAR PÁGINA
 const botao = document.querySelector(".menu-botao");
 const menu = document.querySelector(".menu-lista");
 let aberto = false;
@@ -53,7 +67,7 @@ botao.addEventListener("click", () => {
 
 
 
-
+// ANIMAÇÃO AO CARREGAR SITE PELA PRIMEIRA VEZ
 function animacao(elemento) {
     gsap.set(elemento, { 
         y: 300,  
@@ -69,25 +83,24 @@ function animacao(elemento) {
 
 
 
-
+// DESTAQUE DE ABAS E ARMAZENAMENTO NO LOCALSTORAGE
 let ultimoClicado = botoes.home;
 ultimoClicado.style.background = '#3e403f';
 
-Object.values(botoes).forEach(el => {
+Object.entries(botoes).forEach(([nome, botao]) => {
+  botao.addEventListener("click", () => {
 
-el.addEventListener('click', () => {
     if (ultimoClicado) {
-            ultimoClicado.style.background = '';
+      ultimoClicado.style.background = '';
     }
 
-    el.style.background = '#3e403f';
-        ultimoClicado = el;
-    });
+    botao.style.background = '#3e403f';
+    ultimoClicado = botao;
 
+    localStorage.setItem("secaoAtiva", nome);
+    secoes[nome]();
+  });
 });
-
-
-
 
 
 
@@ -136,6 +149,8 @@ function carregarHome() {
     animacao(substituir.querySelector(".animar"));
      
 }
+
+
 
 // SOBRE
 function carregarSobre() {
@@ -200,6 +215,8 @@ function carregarSobre() {
     animacao(substituir.querySelector(".animar"));
 }
 
+
+
 // PROJETOS
 function carregarProjetos() {
 
@@ -222,11 +239,11 @@ function carregarProjetos() {
                 </div>
                 <div class="projeto-info">
                 <h4>Portfólio Pessoal</h4>
-                <span>Portfólio pessoal feito do zero através de HTML, TAILWIND E REACT</span>
+                <span>Portfólio pessoal feito do zero através de HTML, CSS & JAVASCRIPT</span>
                 <div class="tecnologias-projeto">
                     <img src="https://skillicons.dev/icons?i=html" alt="HTML">
-                    <img src="https://skillicons.dev/icons?i=tailwind" alt="Tailwind">
-                    <img src="https://skillicons.dev/icons?i=react" alt="React">
+                    <img src="https://skillicons.dev/icons?i=css" alt="CSS">
+                    <img src="https://skillicons.dev/icons?i=js" alt="JavaScript">
                 </div>
                 </div>
             </div>
@@ -256,6 +273,8 @@ function carregarProjetos() {
     animacao(substituir.querySelector(".animar"));
 }
 
+
+
 // ACHIEVEMENTS
 function carregarAchievements() {
 
@@ -267,14 +286,14 @@ function carregarAchievements() {
             </div>
 
             <div class="certificados-portfolio">
-            <div class="certificado">
-                <div class="imagem-certificado"></div>
+            <a href="https://cursos.dankicode.com/api/certificados/8f7a0200-0bce-41d3-86af-1c2a3b4fb721" class="certificado">
+                <div style="background: url('certificados/dankijavascript.jpg') center / cover no-repeat;" class="imagem-certificado"></div>
                 <div class="certificado-info">
-                <h4>Certificado 1</h4>
-                <span>Academia tal</span>
-                <span>Data</span>
+                <h4>Javascript Puro</h4>
+                <span>Danki Code</span>
+                <span>23/12/2023</span>
                 </div>
-            </div>
+            </a>
 
             <div class="certificado">
                 <div class="imagem-certificado"></div>
@@ -300,6 +319,8 @@ function carregarAchievements() {
     animacao(substituir.querySelector(".animar"));
 }
 
+
+
 // CONTATO
 function carregarContato() {
 
@@ -324,7 +345,7 @@ function carregarContato() {
             <div class="cartao-contato instagram">
                 <div class="informacoes">
                 <h3>Siga Minha Jornada</h3>
-                <p>Acompanhe meu trabalho criativo.</p>
+                <p>Acompanhe meu trabalho criativo e meus projetos desenvolvidos.</p>
                 <a href="https://www.instagram.com/_duskity_?igsh=MWRwMnpjaTk1ZTkxcw==" target="_blank" class="botao">Ir para o Instagram <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
                 </div>
                 <i class="fa-brands fa-instagram icone"></i>
@@ -342,7 +363,7 @@ function carregarContato() {
             <div class="cartao-contato github">
                 <div class="informacoes">
                 <h3>Explore o Código</h3>
-                <p>Confira meus projetos open-source.</p>
+                <p>Confira alguns dos meus projetos open-source.</p>
                 <a href="https://github.com/Daniel-Dev-FullStack" target="_blank" class="botao">Ir para o GitHub <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
                 </div>
                 <i class="fa-brands fa-github icone"></i>
@@ -364,12 +385,18 @@ function carregarContato() {
     animacao(substituir.querySelector(".animar"));
 }
 
+
+
 // EVENTOS
-botoes.home.addEventListener("click", carregarHome);
-botoes.sobre.addEventListener("click", carregarSobre);
-botoes.projetos.addEventListener("click", carregarProjetos);
-botoes.achievements.addEventListener("click", carregarAchievements);
-botoes.contato.addEventListener("click", carregarContato);
+const secaoSalva = localStorage.getItem("secaoAtiva");
 
+if (secaoSalva && secoes[secaoSalva]) {
+  secoes[secaoSalva]();
 
+  ultimoClicado.style.background = '';
+  botoes[secaoSalva].style.background = '#3e403f';
+  ultimoClicado = botoes[secaoSalva];
 
+} else {
+  carregarHome(); 
+}
